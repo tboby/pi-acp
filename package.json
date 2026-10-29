@@ -50,8 +50,6 @@
     "test:watch": "vitest",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "prepare": "npm run build",
-    "prepack": "npm run build",
     "prepublishOnly": "npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
