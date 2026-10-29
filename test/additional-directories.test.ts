@@ -51,6 +51,37 @@ async function turn(
 }
 
 describe("additionalDirectories client flow", () => {
+  it("keeps container access unrestricted when scope is explicitly disabled", async () => {
+    const previous = process.env.PI_ACP_WORKSPACE_SCOPE;
+    process.env.PI_ACP_WORKSPACE_SCOPE = "0";
+    try {
+      harness = await Harness.create();
+      const init = await harness.initialize();
+      expect(init.agentCapabilities?.sessionCapabilities?.additionalDirectories).toBeUndefined();
+      const skills = join(harness.root, "skills");
+      mkdirSync(skills);
+      const skillFile = join(skills, "SKILL.md");
+      writeFileSync(skillFile, "container skill");
+      const created = await harness.client.newSession({
+        cwd: harness.workspace,
+        mcpServers: [],
+        additionalDirectories: [skills],
+      });
+      expect(piMeta(created).additionalDirectoriesEnforced).toBe(false);
+      await turn(created.sessionId, fauxToolCall("read", { path: skillFile }));
+      await turn(
+        created.sessionId,
+        fauxToolCall("bash", {
+          command: "printf '%s' https://shop.pimoroni.com/products/pirate-audio-headphone-amp",
+        }),
+      );
+      expect(failedTools(created.sessionId)).toBe("");
+    } finally {
+      if (previous === undefined) delete process.env.PI_ACP_WORKSPACE_SCOPE;
+      else process.env.PI_ACP_WORKSPACE_SCOPE = previous;
+    }
+  });
+
   it("reads and writes every root, rejects the outside, and keeps the list across reload", async () => {
     harness = await Harness.create();
     const init = await harness.initialize();

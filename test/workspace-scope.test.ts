@@ -30,6 +30,19 @@ afterAll(() => {
 });
 
 describe("additionalDirectories policy", () => {
+  it("allows a container runtime to disable the workspace boundary explicitly", () => {
+    const previous = process.env.PI_ACP_WORKSPACE_SCOPE;
+    try {
+      process.env.PI_ACP_WORKSPACE_SCOPE = "0";
+      expect(additionalDirectoriesSupported()).toBe(false);
+      expect(additionalDirectoriesCapability()).toBeUndefined();
+    } finally {
+      if (previous === undefined) delete process.env.PI_ACP_WORKSPACE_SCOPE;
+      else process.env.PI_ACP_WORKSPACE_SCOPE = previous;
+    }
+    expect(additionalDirectoriesSupported()).toBe(true);
+  });
+
   it("probes a working boundary before advertising the capability", () => {
     expect(additionalDirectoriesSupported()).toBe(true);
     expect(additionalDirectoriesCapability()).toEqual({});

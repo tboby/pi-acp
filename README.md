@@ -213,15 +213,16 @@ credentials.
 
 Flags win over environment variables, which win over defaults.
 
-| Flag               | Env                     | Default       | Purpose                                                       |
-| ------------------ | ----------------------- | ------------- | ------------------------------------------------------------- |
-| `--agent-dir`      | `PI_CODING_AGENT_DIR`   | `~/.pi/agent` | pi config directory                                           |
-| `--model`          | `PI_ACP_MODEL`          | pi default    | `provider/model[:thinking]` for new sessions                  |
-| `--session-dir`    | `PI_ACP_SESSION_DIR`    | pi default    | Session storage directory                                     |
-| `--trust-projects` | `PI_ACP_TRUST_PROJECTS` | off           | Load `.pi/` project resources without a stored trust decision |
-| `--no-delegation`  | `PI_ACP_DELEGATION=0`   | on            | Never use client fs/terminal delegation                       |
-| `--quiet-startup`  | `PI_ACP_QUIET_STARTUP`  | pi setting    | Skip the startup banner                                       |
-| —                  | `PI_ACP_DEBUG`          | off           | Verbose stderr diagnostics                                    |
+| Flag               | Env                        | Default       | Purpose                                                                                                                                  |
+| ------------------ | -------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `--agent-dir`      | `PI_CODING_AGENT_DIR`      | `~/.pi/agent` | pi config directory                                                                                                                      |
+| `--model`          | `PI_ACP_MODEL`             | pi default    | `provider/model[:thinking]` for new sessions                                                                                             |
+| `--session-dir`    | `PI_ACP_SESSION_DIR`       | pi default    | Session storage directory                                                                                                                |
+| `--trust-projects` | `PI_ACP_TRUST_PROJECTS`    | off           | Load `.pi/` project resources without a stored trust decision                                                                            |
+| `--no-delegation`  | `PI_ACP_DELEGATION=0`      | on            | Never use client fs/terminal delegation                                                                                                  |
+| —                  | `PI_ACP_WORKSPACE_SCOPE=0` | on            | Disable the optional additional-directories path boundary when a container provides isolation; additional directory requests are ignored |
+| `--quiet-startup`  | `PI_ACP_QUIET_STARTUP`     | pi setting    | Skip the startup banner                                                                                                                  |
+| —                  | `PI_ACP_DEBUG`             | off           | Verbose stderr diagnostics                                                                                                               |
 
 Project trust follows pi: `.pi/` extensions in an untrusted cwd are not loaded
 until the user trusts it (`pi` interactively, `defaultProjectTrust: "always"` in

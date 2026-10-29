@@ -64,6 +64,8 @@ let supportedCache: boolean | undefined;
 
 /** True only when a real temp-directory probe shows the scope check accepts inside and rejects outside. */
 export function additionalDirectoriesSupported(): boolean {
+  // Explicit opt-out for runtimes that already isolate the entire container.
+  if (process.env.PI_ACP_WORKSPACE_SCOPE === "0") return false;
   if (supportedCache !== undefined) return supportedCache;
   const probe = mkdtempSync(join(tmpdir(), "pi-acp-scope-"));
   try {
